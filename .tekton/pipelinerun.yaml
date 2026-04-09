@@ -10,6 +10,9 @@ metadata:
 
     # The branch or tag we target (i.e., main, refs/tags/*)
     pipelinesascode.tekton.dev/on-target-branch: "[main]"
+    pipelinesascode.tekton.dev/task-1: "https://raw.githubusercontent.com/lordpangan/cnpe/main/tekton/task-maven-test.yaml"
+    pipelinesascode.tekton.dev/task-2: "https://raw.githubusercontent.com/lordpangan/cnpe/main/tekton/task-semgrep.yaml"
+    pipelinesascode.tekton.dev/task-3: "https://raw.githubusercontent.com/lordpangan/cnpe/main/tekton/task-kaniko.yaml"
 
     # Fetch the git-clone task from hub, we can reference later on it
     # with taskRef and it will automatically be embedded into our pipeline.
