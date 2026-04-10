@@ -104,7 +104,7 @@ spec:
           - name: IMAGE
             value: $(params.image-reference)
           - name: EXTRA_ARGS
-            value: ["--insecure"]
+            value: ["--insecure", "--ignore-path=/product_uuid"]
   workspaces:
     - name: source
       volumeClaimTemplate:
