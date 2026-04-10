@@ -8,7 +8,7 @@ COPY src ./src
 RUN mvn package -DskipTests -q
 
 # Runtime stage
-FROM dhi.io/eclipse-temurin:21-alpine3.22@sha256:46904f8b10ff29d5f4e8ffc762e59df663a92ef254b2b855401297350b9607a0
+FROM docker.io/eclipse-temurin:21-jre-alpine-3.23@sha256:6ad8ed080d9be96b61438ec3ce99388e294af216ed57356000c06070e85c5d5d
 WORKDIR /app
 COPY --from=build /app/target/demo-app1-*.jar app.jar
 EXPOSE 8080
