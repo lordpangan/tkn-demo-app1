@@ -12,4 +12,5 @@ FROM dhi.io/eclipse-temurin:21-alpine3.22@sha256:46904f8b10ff29d5f4e8ffc762e59df
 WORKDIR /app
 COPY --from=build /app/target/demo-app1-*.jar app.jar
 EXPOSE 8080
+USER 1001
 ENTRYPOINT ["java", "-jar", "app.jar"]
