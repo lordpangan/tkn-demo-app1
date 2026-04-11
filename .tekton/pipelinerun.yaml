@@ -10,12 +10,16 @@ metadata:
 
     # The branch or tag we target (i.e., main, refs/tags/*)
     pipelinesascode.tekton.dev/on-target-branch: "[main]"
+
+    # Shared pipeline template — PAC fetches at runtime
+    pipelinesascode.tekton.dev/pipeline: "https://raw.githubusercontent.com/lordpangan/cnpe/main/tekton/pipeline-java-ci.yaml"
+
+    # Remote Task definitions
     pipelinesascode.tekton.dev/task-1: "https://raw.githubusercontent.com/lordpangan/cnpe/main/tekton/task-maven-test.yaml"
     pipelinesascode.tekton.dev/task-2: "https://raw.githubusercontent.com/lordpangan/cnpe/main/tekton/task-semgrep.yaml"
     pipelinesascode.tekton.dev/task-3: "https://raw.githubusercontent.com/lordpangan/cnpe/main/tekton/task-kaniko.yaml"
 
-    # Fetch the git-clone task from hub, we can reference later on it
-    # with taskRef and it will automatically be embedded into our pipeline.
+    # Fetch the git-clone task from hub
     pipelinesascode.tekton.dev/task: "git-clone"
 
     # How many runs we want to keep.
@@ -31,80 +35,8 @@ spec:
     # Per-commit image tag so Chains signs each SHA individually.
     - name: image-reference
       value: "kind-registry:5000/tkn-demo-app1:{{ revision }}"
-  pipelineSpec:
-    params:
-      - name: repo_url
-      - name: revision
-      - name: image-reference
-    workspaces:
-      - name: source
-      - name: basic-auth
-    tasks:
-      - name: fetch-repository
-        taskRef:
-          name: git-clone
-        workspaces:
-          - name: output
-            workspace: source
-          - name: basic-auth
-            workspace: basic-auth
-        params:
-          - name: url
-            value: $(params.repo_url)
-          - name: revision
-            value: $(params.revision)
-
-      # Linting — Spotless / Google Java Format. Reuses the maven-test Task
-      # with a different GOALS value. Runs first because format drift is the
-      # cheapest failure to produce and the cheapest to fix locally
-      # (`mvn spotless:apply`).
-      - name: lint
-        runAfter: [fetch-repository]
-        taskRef:
-          name: maven-test
-        workspaces:
-          - name: source
-            workspace: source
-        params:
-          - name: GOALS
-            value: ["spotless:check"]
-
-      # Domain 1 (GitOps & CD) — run unit tests before any image work so
-      # test failures fail the pipeline cheaply, independent of the build.
-      - name: unit-test
-        runAfter: [lint]
-        taskRef:
-          name: maven-test
-        workspaces:
-          - name: source
-            workspace: source
-
-      # Domain 5 (Security & Policy) — static analysis on the source tree.
-      # Runs after tests so an obviously broken build fails first.
-      - name: sast
-        runAfter: [unit-test]
-        taskRef:
-          name: semgrep
-        workspaces:
-          - name: source
-            workspace: source
-
-      # Domain 1 — build multi-stage image via Kaniko and push to the
-      # in-cluster registry. --insecure because kind-registry:5000 is HTTP.
-      # IMAGE_URL + IMAGE_DIGEST results are picked up by Tekton Chains
-      # cluster-wide config for automatic SLSA provenance + signing.
-      - name: image-build
-        runAfter: [sast]
-        taskRef:
-          name: kaniko
-        workspaces:
-          - name: source
-            workspace: source
-        params:
-          - name: IMAGE
-            value: $(params.image-reference)
-          - name: EXTRA_ARGS
-            value: ["--insecure", "--ignore-path=/product_uuid"]
+  pipelineRef:
+    name: java-ci
   workspaces:
     - name: source
       volumeClaimTemplate:
