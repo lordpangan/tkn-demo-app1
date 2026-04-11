@@ -12,9 +12,13 @@ metadata:
     pipelinesascode.tekton.dev/on-target-branch: "[main]"
 
     # Shared pipeline template from cnpe/tekton — PAC fetches at runtime.
-    # Tasks (maven-test, semgrep, kaniko, git-clone) must be pre-applied to
-    # the pipelines-as-code namespace: kubectl apply -n pipelines-as-code -f cnpe/tekton/
+    # Task annotations are still required here: PAC resolves tasks at the
+    # PipelineRun level, not from the referenced Pipeline.
     pipelinesascode.tekton.dev/pipeline: "https://raw.githubusercontent.com/lordpangan/cnpe/main/tekton/pipeline-java-ci.yaml"
+    pipelinesascode.tekton.dev/task: "git-clone"
+    pipelinesascode.tekton.dev/task-1: "https://raw.githubusercontent.com/lordpangan/cnpe/main/tekton/task-maven-test.yaml"
+    pipelinesascode.tekton.dev/task-2: "https://raw.githubusercontent.com/lordpangan/cnpe/main/tekton/task-semgrep.yaml"
+    pipelinesascode.tekton.dev/task-3: "https://raw.githubusercontent.com/lordpangan/cnpe/main/tekton/task-kaniko.yaml"
 
     # How many runs we want to keep.
     pipelinesascode.tekton.dev/max-keep-runs: "5"
