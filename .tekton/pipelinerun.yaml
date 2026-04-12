@@ -18,7 +18,7 @@ metadata:
     pipelinesascode.tekton.dev/task: "git-clone"
     pipelinesascode.tekton.dev/task-1: "https://raw.githubusercontent.com/lordpangan/cnpe/main/tekton/task-maven-test.yaml"
     pipelinesascode.tekton.dev/task-2: "https://raw.githubusercontent.com/lordpangan/cnpe/main/tekton/task-semgrep.yaml"
-    pipelinesascode.tekton.dev/task-3: "https://raw.githubusercontent.com/lordpangan/cnpe/main/tekton/task-kaniko.yaml"
+    # pipelinesascode.tekton.dev/task-3: "https://raw.githubusercontent.com/lordpangan/cnpe/main/tekton/task-kaniko.yaml"
 
     # How many runs we want to keep.
     pipelinesascode.tekton.dev/max-keep-runs: "5"
