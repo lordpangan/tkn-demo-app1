@@ -15,10 +15,8 @@ metadata:
     # Task annotations are still required here: PAC resolves tasks at the
     # PipelineRun level, not from the referenced Pipeline.
     pipelinesascode.tekton.dev/pipeline: "https://raw.githubusercontent.com/lordpangan/cnpe/main/tekton/pipeline-java-ci.yaml"
-    pipelinesascode.tekton.dev/task: "git-clone"
-    pipelinesascode.tekton.dev/task-1: "https://raw.githubusercontent.com/tektoncd/catalog/refs/heads/main/task/maven/0.4/maven.yaml"
-    pipelinesascode.tekton.dev/task-2: "https://raw.githubusercontent.com/lordpangan/cnpe/main/tekton/task-semgrep.yaml"
-    pipelinesascode.tekton.dev/task-3: "https://raw.githubusercontent.com/tektoncd/catalog/main/task/kaniko/0.7/kaniko.yaml"
+    pipelinesascode.tekton.dev/task: "[git-clone, maven, kaniko]"
+    pipelinesascode.tekton.dev/task-1: "https://raw.githubusercontent.com/lordpangan/cnpe/main/tekton/task-semgrep.yaml"
 
     # How many runs we want to keep.
     pipelinesascode.tekton.dev/max-keep-runs: "5"
